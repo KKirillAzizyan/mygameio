@@ -26,7 +26,7 @@
     // игрок
     const p = G.world.findSafeSpot(state, 0);
     const player = new G.Organism(state, {
-      name: nick || 'Игрок', x: p.x, y: p.y, mass: C.START_MASS, isPlayer: true,
+      name: nick || G.T('Игрок'), x: p.x, y: p.y, mass: C.START_MASS, isPlayer: true,
     });
     player.energy = player.maxEnergy();
     state.player = player;
@@ -68,21 +68,29 @@
       G.input.init(canvas);
       G.ui.init();
       G.ui.showMenu();
+      G.ui.renderBest();
+
+      // 1.19.2: игрок видит меню и может начать — сообщаем платформе Game Ready.
+      // Ждём первый кадр, чтобы индикатор зеленел вместе с появлением меню.
+      requestAnimationFrame(() => requestAnimationFrame(() => G.ysdk.notifyReady()));
 
       lastTs = performance.now();
       requestAnimationFrame(game.loop);
     },
 
     start() {
-      const nick = (G.ui.els.nick.value || '').trim() || 'Игрок';
+      const nick = (G.ui.els.nick.value || '').trim() || G.T('Игрок');
       createState(nick);
       game.mode = 'playing';
       G.ui.hideMenu();
       G.ui.hideDeath();
       G.ui.hidePause();
       G.ui.hideEvo();
-      G.ui.banner('🧫 Выживи и стань большим! Мир меняется со временем...', 5000);
-      G.ui.toast('Добро пожаловать! H — справка по управлению', 'good');
+      G.ui.banner(G.T('🧫 Выживи и стань большим! Мир меняется со временем...'), 5000);
+      G.ui.toast(G.T('Добро пожаловать! H — справка по управлению'), 'good');
+      // 1.19.3: старт геймплея; липкий баннер прячем — в игре мешает хотбару
+      G.ysdk.gameplayStart();
+      G.ysdk.showBanner(false);
     },
 
     respawn() { game.start(); },
@@ -94,12 +102,16 @@
       G.ui.hidePause();
       G.ui.hideEvo();
       G.ui.showMenu();
+      G.ui.renderBest();
+      G.ysdk.gameplayStop();
+      G.ysdk.showBanner(true);
     },
 
     togglePause() {
       if (game.mode !== 'playing' || !G.state) return;
       G.state.paused = !G.state.paused;
-      if (G.state.paused) G.ui.showPause(); else G.ui.hidePause();
+      if (G.state.paused) { G.ui.showPause(); G.ysdk.gameplayStop(); }
+      else { G.ui.hidePause(); G.ysdk.gameplayStart(); }
     },
 
     onPlayerDeath(killer) {
@@ -108,7 +120,13 @@
       s.player.lastMass = s.peakMass;
       s.player.lastTime = s.time - s.bornAt;
       s.paused = true;
-      setTimeout(() => { if (game.mode === 'dead') G.ui.showDeath(killer, s); }, 600);
+      G.ysdk.gameplayStop();      // 1.19.3: геймплей остановлен
+      G.ysdk.saveBest(s.peakMass); // 1.9: сохранение рекорда
+      // 4.4: реклама между сессиями (кулдаун внутри showAd), затем экран смерти
+      setTimeout(() => {
+        if (game.mode !== 'dead') return;
+        G.ysdk.showAd(() => { if (game.mode === 'dead') G.ui.showDeath(killer, s); });
+      }, 600);
     },
 
     /* ---------- ввод ---------- */

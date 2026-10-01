@@ -13,7 +13,7 @@
   <!-- HUD -->
   <div id="hud" class="hidden">
     <div id="stats">
-      <div id="massLine">🧫 <b id="massVal">0</b> массы</div>
+      <div id="massLine">🧫 <b id="massVal">0</b> <span data-i18n="массы">массы</span></div>
       <div id="energyBar"><div id="energyFill"></div><span id="energyVal"></span></div>
       <div id="effects"></div>
       <div id="decoy">⚠ <span id="decoyVal"></span></div>
@@ -28,8 +28,8 @@
     <div id="combo" class="hidden">🔥 x<span id="comboVal">1</span></div>
 
     <div id="rightPanel">
-      <div id="leaderboard"><div class="panelTitle">🏆 Лидеры</div><ol id="lbList"></ol></div>
-      <div id="contracts"><div class="panelTitle">🎯 Контракты</div><ul id="ctList"></ul></div>
+      <div id="leaderboard"><div class="panelTitle" data-i18n="🏆 Лидеры">🏆 Лидеры</div><ol id="lbList"></ol></div>
+      <div id="contracts"><div class="panelTitle" data-i18n="🎯 Контракты">🎯 Контракты</div><ul id="ctList"></ul></div>
     </div>
 
     <canvas id="minimap" width="190" height="190"></canvas>
@@ -37,29 +37,26 @@
     <div id="hotbar"></div>
 
     <div id="toasts"></div>
-    <div id="hint">H — управление · P — пауза</div>
+    <div id="hint" data-i18n="H — управление · P — пауза">H — управление · P — пауза</div>
   </div>
 
   <!-- Стартовое меню -->
   <div id="menu" class="overlay">
     <div class="panel">
       <h1>🧫 mygameio</h1>
-      <p class="sub">Agar.io-подобная игра: ловушки, способности, эволюция, опасности и многое другое</p>
-      <input id="nick" type="text" maxlength="16" placeholder="Введите ник..." value="">
-      <button id="playBtn">▶ Играть</button>
-      <div class="menuControls">
-        <b>Управление:</b> мышь — движение · Space — разделение ·
-        Q/E/R/F/C/V — способности · X — призрак ·
-        1–6 — ловушки · 7–0 — стройки · P — пауза · H — справка
-      </div>
-      <div class="version">v0.1 · план: 16/16 механик · этап 5 — мультиплеер</div>
+      <p class="sub" data-i18n="Agar.io-подобная игра: ловушки, способности, эволюция, опасности и многое другое">Agar.io-подобная игра: ловушки, способности, эволюция, опасности и многое другое</p>
+      <input id="nick" type="text" maxlength="16" placeholder="Введите ник..." data-i18n-ph="Введите ник..." value="">
+      <button id="playBtn" data-i18n="▶ Играть">▶ Играть</button>
+      <div class="menuControls"><b data-i18n="Управление:">Управление:</b> <span data-i18n="мышь — движение · Space — разделение · Q/E/R/F/C/V — способности · X — призрак · 1–6 — ловушки · 7–0 — стройки · P — пауза · H — справка">мышь — движение · Space — разделение · Q/E/R/F/C/V — способности · X — призрак · 1–6 — ловушки · 7–0 — стройки · P — пауза · H — справка</span></div>
+      <div class="version" data-i18n="v0.1 · план: 16/16 механик · этап 5 — мультиплеер">v0.1 · план: 16/16 механик · этап 5 — мультиплеер</div>
+      <div id="bestLine" class="version hidden"></div>
     </div>
   </div>
 
   <!-- Попап эволюции -->
   <div id="evoPopup" class="overlay hidden">
     <div class="panel wide">
-      <h2>🧬 Мутация! Выберите путь развития</h2>
+      <h2 data-i18n="🧬 Мутация! Выберите путь развития">🧬 Мутация! Выберите путь развития</h2>
       <div id="evoChoices"></div>
     </div>
   </div>
@@ -67,35 +64,40 @@
   <!-- Пауза -->
   <div id="pause" class="overlay hidden">
     <div class="panel">
-      <h2>⏸ Пауза</h2>
-      <button id="resumeBtn">Продолжить (P)</button>
-      <button id="helpBtn">Управление (H)</button>
-      <button id="menuBtn">В меню</button>
+      <h2 data-i18n="⏸ Пауза">⏸ Пауза</h2>
+      <button id="resumeBtn" data-i18n="Продолжить (P)">Продолжить (P)</button>
+      <button id="helpBtn" data-i18n="Управление (H)">Управление (H)</button>
+      <button id="menuBtn" data-i18n="В меню">В меню</button>
     </div>
   </div>
 
   <!-- Справка -->
   <div id="help" class="overlay hidden">
     <div class="panel wide">
-      <h2>🎮 Управление и механики</h2>
+      <h2 data-i18n="🎮 Управление и механики">🎮 Управление и механики</h2>
       <div id="helpBody"></div>
-      <button id="helpClose">Закрыть (H)</button>
+      <button id="helpClose" data-i18n="Закрыть (H)">Закрыть (H)</button>
     </div>
   </div>
 
   <!-- Смерть -->
   <div id="death" class="overlay hidden">
     <div class="panel">
-      <h2>💀 Вы поглощены</h2>
+      <h2 data-i18n="💀 Вы поглощены">💀 Вы поглощены</h2>
       <div id="deathStats"></div>
-      <button id="respawnBtn">🔄 Играть снова (Enter)</button>
-      <button id="deathMenuBtn">В меню</button>
+      <button id="respawnBtn" data-i18n="🔄 Играть снова (Enter)">🔄 Играть снова (Enter)</button>
+      <button id="deathMenuBtn" data-i18n="В меню">В меню</button>
     </div>
   </div>
 </div>
 
+<!-- Yandex Games SDK: относительный путь для архива на сервере Яндекса;
+     локально путь обслуживает @yandex-games/sdk-dev-proxy (npm run dev) -->
+<script src="/sdk.js"></script>
 <script src="js/config.js"></script>
 <script src="js/utils.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/ysdk.js"></script>
 <script src="js/input.js"></script>
 <script src="js/food.js"></script>
 <script src="js/viruses.js"></script>

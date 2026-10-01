@@ -18,7 +18,7 @@
       if (!t || !org.alive) return false;
       const cost = Math.ceil(org.mass * t.costFrac);
       if (org.mass < t.minMass) {
-        if (org.isPlayer) G.ui.toast('Нужно минимум ' + t.minMass + ' массы для: ' + t.name, 'bad');
+        if (org.isPlayer) G.ui.toast(G.Tf('build_min_mass', { mass: t.minMass, name: G.T(t.name) }), 'bad');
         return false;
       }
       if ((org.buildCds[t.id] || 0) > 0) return false;
@@ -48,7 +48,7 @@
         b0.pair = b1;
         state.buildings.push(b0, b1);
         org.pendingPortal = null;
-        if (org.isPlayer) G.ui.toast('🌀 Порталы соединены! (−' + cost + ' массы)', 'good');
+        if (org.isPlayer) G.ui.toast(G.Tf('portal_linked', { cost }), 'good');
         return true;
       }
 
@@ -63,7 +63,7 @@
         dead: false,
       };
       state.buildings.push(b);
-      if (org.isPlayer) G.ui.toast(t.icon + ' ' + t.name + ' построена (−' + cost + ' массы)', 'good');
+      if (org.isPlayer) G.ui.toast(G.Tf('build_done', { icon: t.icon, name: G.T(t.name), cost }), 'good');
       return true;
     },
 

@@ -80,7 +80,7 @@
       if (eff === 'massregen2x') p.addEff('massregen', dur, 3);
       else p.addEff(eff, dur, val || 1);
       if (c.def.id === 'survive') { p.energy = p.maxEnergy(); }
-      G.ui.toast('🏆 Контракт выполнен: «' + c.def.name + '» → ' + c.def.reward, 'good');
+      G.ui.toast(G.Tf('contract_done', { name: G.T(c.def.name), reward: G.T(c.def.reward) }), 'good');
     },
   };
 

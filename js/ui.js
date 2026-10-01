@@ -39,21 +39,20 @@
     /* ---------- хотбар ---------- */
     buildHotbar() {
       const groups = [
-        { label: '⚡', list: G.abilities.LIST.map(a => ({ kind: 'ability', id: a.id, key: a.key, icon: a.icon, name: a.name, cost: a.cost, costLabel: 'энерг' })) },
-        { label: '🧫', list: G.traps.TYPES.map(t => ({ kind: 'trap', id: t.id, key: t.key, icon: t.icon, name: t.name, cost: t.cost, costLabel: 'масса' })) },
-        { label: '🧱', list: G.buildings.TYPES.map(t => ({ kind: 'build', id: t.id, key: t.key, icon: t.icon, name: t.name, cost: 0, costLabel: '%' })) },
+        { label: '⚡', list: G.abilities.LIST.map(a => ({ kind: 'ability', id: a.id, key: a.key, icon: a.icon, name: G.T(a.name), cost: a.cost, costLabel: 'энерг' })) },
+        { label: '🧫', list: G.traps.TYPES.map(t => ({ kind: 'trap', id: t.id, key: t.key, icon: t.icon, name: G.T(t.name), cost: t.cost, costLabel: 'масса' })) },
+        { label: '🧱', list: G.buildings.TYPES.map(t => ({ kind: 'build', id: t.id, key: t.key, icon: t.icon, name: G.T(t.name), cost: 0, costLabel: '%' })) },
       ];
       ui.slots = [];
       let html = '';
       for (const g of groups) {
         html += '<div class="slotGroup">';
         for (const s of g.list) {
-          html += `<div class="slot" data-kind="${s.kind}" data-id="${s.id}" title="${s.name}${s.cost ? ' (' + s.cost + ' ' + s.costLabel + ')' : ''}">
-            <span class="key">${s.key}</span>
-            <span class="ico">${s.icon}</span>
-            <span class="cost">${s.cost ? s.cost : ''}</span>
-            <div class="cd hidden"></div>
-          </div>`;
+          html += `<div class="slot" data-kind="${s.kind}" data-id="${s.id}" title="${s.name}${s.cost ? ' (' + s.cost + ' ' + G.T(s.costLabel) + ')' : ''}">`;
+          html += `<span class="key">${s.key}</span>`;
+          html += `<span class="ico">${s.icon}</span>`;
+          html += `<span class="cost">${s.cost ? s.cost : ''}</span>`;
+          html += `<div class="cd hidden"></div></div>`;
           ui.slots.push(s);
         }
         html += '</div>';
@@ -62,37 +61,39 @@
     },
 
     buildHelp() {
+      const T = G.T, Tf = G.Tf;
       const rows = (items) => items.map(i => `<tr><td><kbd>${i[0]}</kbd></td><td>${i[1]}</td></tr>`).join('');
+      const aMeta = a => Tf('ability_meta', { cost: a.cost, cd: a.cd });
       ui.els.helpBody.innerHTML = `
-        <h3>🖱 Движение и боёвка</h3>
+        <h3>${T('🖱 Движение и боёвка')}</h3>
         <table>${rows([
-          ['Мышь', 'Двигать клетку (курсор — цель)'],
-          ['Space', 'Быстрое разделение — атака или побег'],
-          ['ЛКМ', 'То же, что и движение (для тач-режима)'],
+          [T('Мышь'), T('Двигать клетку (курсор — цель)')],
+          ['Space', T('Быстрое разделение — атака или побег')],
+          [T('ЛКМ'), T('То же, что и движение (для тач-режима)')],
         ])}</table>
-        <h3>⚡ Способности (тратят энергию, энергия растёт с массой)</h3>
-        <table>${rows(G.abilities.LIST.map(a => [a.key, `<b>${a.icon} ${a.name}</b> — ${a.desc} (${a.cost} энергии, кулдаун ${a.cd}с)`]))}</table>
-        <h3>🧫 Ловушки (тратят массу, кулдаун)</h3>
-        <table>${rows(G.traps.TYPES.map(t => [t.key, `<b>${t.icon} ${t.name}</b> — ${t.desc} (${t.cost} массы)`]))}</table>
-        <h3>🧱 Строительство (тратит % массы)</h3>
-        <table>${rows(G.buildings.TYPES.map(b => [b.key, `<b>${b.icon} ${b.name}</b> — ${b.desc}`]))}</table>
-        <h3>⚙ Прочее</h3>
+        <h3>${T('⚡ Способности (тратят энергию, энергия растёт с массой)')}</h3>
+        <table>${rows(G.abilities.LIST.map(a => [a.key, `<b>${a.icon} ${T(a.name)}</b> — ${T(a.desc)} (${aMeta(a)})`]))}</table>
+        <h3>${T('🧫 Ловушки (тратят массу, кулдаун)')}</h3>
+        <table>${rows(G.traps.TYPES.map(t => [t.key, `<b>${t.icon} ${T(t.name)}</b> — ${T(t.desc)} (${Tf('trap_meta', { cost: t.cost })})`]))}</table>
+        <h3>${T('🧱 Строительство (тратит % массы)')}</h3>
+        <table>${rows(G.buildings.TYPES.map(b => [b.key, `<b>${b.icon} ${T(b.name)}</b> — ${T(b.desc)}`]))}</table>
+        <h3>${T('⚙ Прочее')}</h3>
         <table>${rows([
-          ['P', 'Пауза'], ['H', 'Эта справка'], ['Enter', 'Респавн после смерти'],
+          ['P', T('Пауза')], ['H', T('Эта справка')], ['Enter', T('Респавн после смерти')],
         ])}</table>
-        <h3>🧠 Стратегия (п.16 — риск размера)</h3>
+        <h3>${T('🧠 Стратегия (п.16 — риск размера)')}</h3>
         <table>
-          <tr><th>Размер</th><th>Плюс</th><th>Минус</th></tr>
-          <tr><td>Маленький</td><td>Очень быстрый</td><td>Мало массы</td></tr>
-          <tr><td>Средний</td><td>Сбалансирован</td><td>Нет преимуществ</td></tr>
-          <tr><td>Большой</td><td>Сильный</td><td>Медленный</td></tr>
-          <tr><td>Огромный</td><td>Поглощает почти всех</td><td>Уязвим к ловушкам</td></tr>
-          <tr><td>Гигантский</td><td>Особые способности</td><td>Виден на всей карте</td></tr>
+          <tr><th>${T('Размер')}</th><th>${T('Плюс')}</th><th>${T('Минус')}</th></tr>
+          <tr><td>${T('Маленький')}</td><td>${T('Очень быстрый')}</td><td>${T('Мало массы')}</td></tr>
+          <tr><td>${T('Средний')}</td><td>${T('Сбалансирован')}</td><td>${T('Нет преимуществ')}</td></tr>
+          <tr><td>${T('Большой')}</td><td>${T('Сильный')}</td><td>${T('Медленный')}</td></tr>
+          <tr><td>${T('Огромный')}</td><td>${T('Поглощает почти всех')}</td><td>${T('Уязвим к ловушкам')}</td></tr>
+          <tr><td>${T('Гигантский')}</td><td>${T('Особые способности')}</td><td>${T('Виден на всей карте')}</td></tr>
         </table>
-        <p>⚠️ Большие клетки <b>разлагаются</b>: без еды теряют массу быстрее. Двигайся и охотись!</p>
-        <p>💡 <b>Энергия</b> растёт с массой: оставь массу себе — станешь сильнее; трать на ловушки — контролируй территорию; трать на способности — атакуй и убегай.</p>
-        <p>👑 Каждые 5 минут появляется <b>зона короля</b>: удержи её ${C.KING_CAPTURE} сек и получи бонусы — но местоположение увидят все.</p>
-        <p>🌍 Мир меняется: 0–3 мин спокойно → 3–6 мин вирусы → 6–10 мин часть карты закрывается → 10+ мин опасные зоны и гигантские NPC.</p>
+        <p>${Tf('help_decay')}</p>
+        <p>${Tf('help_energy')}</p>
+        <p>${Tf('help_king', { sec: C.KING_CAPTURE })}</p>
+        <p>${Tf('help_phases')}</p>
       `;
     },
 
@@ -100,7 +101,7 @@
     toast(msg, cls) {
       const el = document.createElement('div');
       el.className = 'toast ' + (cls || '');
-      el.textContent = msg;
+      el.textContent = G.T(msg);
       ui.els.toasts.appendChild(el);
       while (ui.els.toasts.children.length > 5) ui.els.toasts.firstChild.remove();
       setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .4s'; setTimeout(() => el.remove(), 400); }, 3000);
@@ -108,7 +109,7 @@
 
     banner(msg, ms) {
       const b = ui.els.banner;
-      b.textContent = msg;
+      b.textContent = G.T(msg);
       b.classList.remove('hidden');
       ui.bannerT = (ms || 4000) / 1000;
     },
@@ -126,13 +127,15 @@
     showHelp() { ui.els.help.classList.remove('hidden'); },
     hideHelp() { ui.els.help.classList.add('hidden'); },
     showDeath(killer, state) {
+      const Tf = G.Tf;
       ui.els.death.classList.remove('hidden');
       ui.els.deathStats.innerHTML =
-        `Масса: <b>${U.fmt(state.player.lastMass || 0)}</b><br>` +
-        `Время выживания: <b>${U.time(state.player.lastTime || 0)}</b><br>` +
-        `Убийств: <b>${state.player.kills}</b><br>` +
-        `Мутаций: <b>${state.player.evoTotal || 0}</b>` +
-        (killer && killer.name ? `<br>Убийца: <span style="color:${killer.color || '#fff'}">${killer.name}</span>` : '');
+        Tf('d_mass', { v: U.fmt(state.player.lastMass || 0) }) + '<br>' +
+        Tf('d_time', { v: U.time(state.player.lastTime || 0) }) + '<br>' +
+        Tf('d_kills', { v: state.player.kills }) + '<br>' +
+        Tf('d_evo', { v: state.player.evoTotal || 0 }) +
+        (killer && killer.name ? '<br>' + Tf('d_killer', { c: killer.color || '#fff', n: killer.name }) : '') +
+        (G.ysdk && G.ysdk.best ? '<br>' + Tf('d_best', { v: U.fmt(G.ysdk.best) }) : '');
     },
     hideDeath() { ui.els.death.classList.add('hidden'); },
 
@@ -140,9 +143,9 @@
       const cards = G.evo.CLASSES.map(cl => `
         <div class="evoCard" data-id="${cl.id}">
           <div class="evoIcon">${cl.icon}</div>
-          <div class="evoName">${cl.name}</div>
-          <div class="evoDesc">${cl.desc}</div>
-          <div class="evoLvl">текущий уровень: ${org.evo[cl.id] || 0} → ${(org.evo[cl.id] || 0) + 1}</div>
+          <div class="evoName">${G.T(cl.name)}</div>
+          <div class="evoDesc">${G.T(cl.desc)}</div>
+          <div class="evoLvl">${G.Tf('evo_level', { a: org.evo[cl.id] || 0, b: (org.evo[cl.id] || 0) + 1 })}</div>
         </div>`).join('');
       ui.els.evoChoices.innerHTML = cards;
       ui.els.evoChoices.querySelectorAll('.evoCard').forEach(el => {
@@ -153,6 +156,25 @@
     hideEvo() {
       ui.els.evo.classList.add('hidden');
       if (G.state) { G.state.paused = false; G.state.evoPopupOpen = false; }
+    },
+
+    /* ---------- рекорд (сохранение прогресса, п.1.9) ---------- */
+    renderBest() {
+      const el = document.getElementById('bestLine');
+      if (!el) return;
+      if (G.ysdk && G.ysdk.best > 0) {
+        el.classList.remove('hidden');
+        el.textContent = G.Tf('best_line', { v: U.fmt(G.ysdk.best) });
+      } else el.classList.add('hidden');
+    },
+
+    /* ---------- смена локализации (вызывается из i18n после определения языка) ---------- */
+    relocalize() {
+      if (!ui.els.menu) return; // DOM ещё не готов
+      ui.buildHotbar();
+      ui.buildHelp();
+      G.i18n.applyDOM();
+      ui.renderBest();
     },
 
     /* ---------- ежекадровое обновление ---------- */
@@ -191,7 +213,7 @@
       // разложение
       if (p.decaying) {
         ui.els.decoy.style.display = 'block';
-        ui.els.decoyVal.textContent = 'Разложение — ищи еду или двигайся!';
+        ui.els.decoyVal.textContent = G.T('Разложение — ищи еду или двигайся!');
       } else ui.els.decoy.style.display = 'none';
 
       // лидерборд
@@ -203,25 +225,27 @@
       // контракты
       ui.els.ct.innerHTML = G.contracts.active.map(c => {
         const done = c.done;
-        const prog = c.def.id === 'survive' ? `${Math.floor(c.progress)}/${c.def.target}с`
+        const prog = c.def.id === 'survive' ? G.Tf('time_prog', { a: Math.floor(c.progress), b: c.def.target })
           : `${Math.floor(Math.min(c.progress, c.def.target))}/${c.def.target}`;
-        return `<li class="${done ? 'done' : ''}">${done ? '✅' : '▫'} ${c.def.name} <span class="ctProg">${done ? 'награда: ' + c.def.reward : prog}</span></li>`;
+        return `<li class="${done ? 'done' : ''}">${done ? '✅' : '▫'} ${G.T(c.def.name)} <span class="ctProg">${done ? G.Tf('contract_reward', { r: G.T(c.def.reward) }) : prog}</span></li>`;
       }).join('');
 
       // король
       const z = G.king.zone;
       if (p.king) {
         ui.els.king.classList.remove('hidden');
-        ui.els.kingText.textContent = '👑 ВЫ КОРОЛЬ! ' + Math.ceil(p.kingT) + 'с · +масса/с · −50% энергии';
+        ui.els.kingText.textContent = G.Tf('king_you', { t: Math.ceil(p.kingT) });
         ui.els.kingFill.style.width = (p.kingT / C.KING_DURATION * 100) + '%';
       } else if (z) {
         ui.els.king.classList.remove('hidden');
         if (z.holder === p) {
-          ui.els.kingText.textContent = '👑 Зона короля: удерживайте! ' + Math.ceil(C.KING_CAPTURE - z.capture) + 'с';
+          ui.els.kingText.textContent = G.Tf('king_hold', { t: Math.ceil(C.KING_CAPTURE - z.capture) });
           ui.els.kingFill.style.width = (z.capture / C.KING_CAPTURE * 100) + '%';
         } else {
           const holder = z.holder;
-          ui.els.kingText.textContent = '👑 Зона короля' + (holder ? ' — захватывает: ' + holder.name : ' (некто внутри)') + ' · ' + Math.ceil(z.life) + 'с';
+          ui.els.kingText.textContent = holder
+            ? G.Tf('king_holding', { name: holder.name, t: Math.ceil(z.life) })
+            : G.Tf('king_inside', { t: Math.ceil(z.life) });
           ui.els.kingFill.style.width = (z.capture / C.KING_CAPTURE * 100) + '%';
         }
       } else ui.els.king.classList.add('hidden');
@@ -229,7 +253,7 @@
       // событие
       if (state.event) {
         ui.els.banner.classList.remove('hidden');
-        if (ui.bannerT <= 0) ui.els.banner.textContent = state.event.name + ' · ' + Math.ceil(state.event.t) + 'с';
+        if (ui.bannerT <= 0) ui.els.banner.textContent = G.Tf('event_timer', { name: G.T(state.event.name), t: Math.ceil(state.event.t) });
       }
 
       // хотбар: кулдауны и доступность

@@ -17,7 +17,7 @@
     spawnOne(state) {
       const p = G.world.findSafeSpot(state, 300);
       const org = new G.Organism(state, {
-        name: U.pick(NAMES) + '-' + U.randInt(1, 99),
+        name: G.T(U.pick(NAMES)) + '-' + U.randInt(1, 99),
         x: p.x, y: p.y,
         mass: U.rand(C.START_MASS, C.START_MASS * 3),
         isPlayer: false,
@@ -37,7 +37,7 @@
                 const p = G.world.findSafeSpot(state, 350);
             bot.cells = [G.newCell(p.x, p.y, C.START_MASS)];
             bot.alive = true;
-            bot.name = U.pick(NAMES) + '-' + U.randInt(1, 99);
+            bot.name = G.T(U.pick(NAMES)) + '-' + U.randInt(1, 99);
             bot.color = U.hexHsl(U.rand(0, 360), 70, 55);
             bot.eff = {}; bot.cds = {}; bot.trapCds = {}; bot.buildCds = {};
             bot.evo = { predator: 0, tank: 0, hunter: 0, parasite: 0, mutant: 0 };

@@ -19,7 +19,7 @@
       const t = traps.byId(typeId);
       if (!t || org.alive === false) return false;
       if ((org.trapCds[t.id] || 0) > 0) return false;
-      if (org.mass < t.cost) { if (org.isPlayer) G.ui.toast('Мало массы для ловушки (' + t.cost + ')', 'bad'); return false; }
+      if (org.mass < t.cost) { if (org.isPlayer) G.ui.toast(G.Tf('trap_low_mass', { cost: t.cost }), 'bad'); return false; }
 
       const cell = org.mainCell();
       const dx = org.aimX - cell.x, dy = org.aimY - cell.y;
@@ -33,7 +33,7 @@
         type: t, x: px, y: py, r: t.r, owner: org,
         life: t.life, maxLife: t.life, armed: 0.4, dead: false,
       });
-      if (org.isPlayer) G.ui.toast(t.icon + ' ' + t.name + ' установлена (−' + t.cost + ' массы)', '');
+      if (org.isPlayer) G.ui.toast(G.Tf('trap_placed', { icon: t.icon, name: G.T(t.name), cost: t.cost }), '');
       return true;
     },
 
@@ -88,8 +88,8 @@
           const lose = Math.min(org.mass * 0.04, 25);
           org.setMass(Math.max(C.MIN_MASS + 1, org.mass - lose));
           org.addEff('slow', 1.5, 0.6);
-          if (org.isPlayer) G.ui.toast('🪤 Ловушка! −' + Math.round(lose) + ' массы', 'bad');
-          if (tr.owner && tr.owner.isPlayer) G.ui.toast('🪤 ' + tr.owner.name + ' попался на фальшивую еду!', 'good');
+          if (org.isPlayer) G.ui.toast(G.Tf('trap_hit', { lose: Math.round(lose) }), 'bad');
+          if (tr.owner && tr.owner.isPlayer) G.ui.toast(G.Tf('trap_owner_hit', { name: tr.owner.name }), 'good');
           break;
         }
       }

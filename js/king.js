@@ -16,7 +16,7 @@
           // появление зоны
           const p = G.world.findSafeSpot(state, 600);
           k.zone = { x: p.x, y: p.y, r: C.KING_ZONE_R, capture: 0, holder: null, life: 120, t: 0 };
-          if (state.player && state.player.isPlayer) G.ui.banner('👑 Зона короля появилась! Удержи её ' + C.KING_CAPTURE + ' сек', 5000);
+          if (state.player && state.player.isPlayer) G.ui.banner(G.Tf('king_zone', { sec: C.KING_CAPTURE }), 5000);
           G.world.ring(p.x, p.y, C.KING_ZONE_R, '#fde047');
         }
         return;
@@ -71,10 +71,10 @@
       G.world.ring(c.x, c.y, 300, '#fde047');
       G.world.spark(c.x, c.y, '#fde047', 30);
       if (org.isPlayer) {
-        G.ui.toast('👑 ВЫ КОРОЛЬ! +масса/с, −50% стоимость способностей, отметка на карте!', 'good');
-        G.ui.banner('👑 ' + org.name + ' — Король клетки!', 4000);
+        G.ui.toast(G.T('👑 ВЫ КОРОЛЬ! +масса/с, −50% стоимость способностей, отметка на карте!'), 'good');
+        G.ui.banner(G.Tf('king_banner', { name: org.name }), 4000);
       } else if (state.player && state.player.alive) {
-        G.ui.toast('👑 ' + org.name + ' стал королём', 'bad');
+        G.ui.toast(G.Tf('king_crowned', { name: org.name }), 'bad');
       }
     },
   };

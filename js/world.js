@@ -384,7 +384,7 @@
         ctx.fillText('🌀', pp.x, pp.y + 9);
         ctx.font = '14px sans-serif';
         ctx.fillStyle = 'rgba(196,181,253,0.95)';
-        ctx.fillText('поставьте пару рядом', pp.x, pp.y + 56);
+        ctx.fillText(G.T('поставьте пару рядом'), pp.x, pp.y + 56);
       }
 
       // NPC
@@ -837,7 +837,7 @@
           ctx.fillStyle = 'rgba(255,255,255,0.9)';
           ctx.font = 'bold ' + Math.max(16, n.r * 0.22) + 'px sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText('💀 ' + n.type.name + ' ' + Math.round(n.mass), 0, -n.r - 12);
+          ctx.fillText('💀 ' + G.T(n.type.name) + ' ' + Math.round(n.mass), 0, -n.r - 12);
         }
       }
       ctx.restore();

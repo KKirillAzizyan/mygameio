@@ -23,7 +23,7 @@
       if ((org.cds[id] || 0) > 0) return false;
       const cost = org.stat('abilityCost') !== undefined ? a.cost * org.stat('abilityCost') : a.cost;
       if (org.energy < cost) {
-        if (org.isPlayer) G.ui.toast('⚡ Недостаточно энергии (' + a.name + ': ' + cost + ')', 'bad');
+        if (org.isPlayer) G.ui.toast(G.Tf('no_energy', { name: G.T(a.name), cost }), 'bad');
         return false;
       }
       org.energy -= cost;
@@ -76,7 +76,7 @@
           org.addEff('ghost', a.dur, 1);
           break;
       }
-      if (org.isPlayer) G.ui.toast(a.icon + ' ' + a.name, 'good');
+      if (org.isPlayer) G.ui.toast(a.icon + ' ' + G.T(a.name), 'good');
       return true;
     },
   };

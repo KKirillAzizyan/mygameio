@@ -87,14 +87,14 @@
       }
 
       if (player && player.alive) {
-        G.ui.banner(ev.name + ' — ' + ev.desc, 4500);
-        G.ui.toast(ev.name, 'good');
+        G.ui.banner(G.T(ev.name) + ' — ' + G.T(ev.desc), 4500);
+        G.ui.toast(G.T(ev.name), 'good');
       }
     },
 
     end(state, ev) {
       if (ev.target) ev.target.bounty = false;
-      if (state.player) G.ui.toast('Событие «' + ev.name + '» закончилось', '');
+      if (state.player) G.ui.toast(G.Tf('event_ended', { name: G.T(ev.name) }), '');
     },
   };
 

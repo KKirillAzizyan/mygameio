@@ -34,7 +34,7 @@
       org.pendingEvo = false;
       const cl = CLASSES.find(c => c.id === classId);
       if (org.isPlayer) {
-        G.ui.toast('🧬 Мутация: ' + cl.name + ' ур.' + org.evo[classId], 'good');
+        G.ui.toast(G.Tf('evo_mutation', { name: G.T(cl.name), lvl: org.evo[classId] }), 'good');
         G.ui.hideEvo();
         if (!state.paused) { /* возвращаем игру */ }
       }

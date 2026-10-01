@@ -48,8 +48,8 @@
               m.active = C.MAGNET_DURATION;
               m.holder = org;
               G.world.ring(m.x, m.y, C.MAGNET_RANGE, '#22d3ee');
-              if (org.isPlayer) G.ui.toast('🧲 Магнит активен ' + C.MAGNET_DURATION + ' с — частицы притягиваются!', 'good');
-              else if (state.player && state.player.alive) G.ui.toast('🧲 ' + org.name + ' активировал магнит', '');
+              if (org.isPlayer) G.ui.toast(G.Tf('magnet_self', { sec: C.MAGNET_DURATION }), 'good');
+              else if (state.player && state.player.alive) G.ui.toast(G.Tf('magnet_other', { name: org.name }), '');
               break;
             }
           }

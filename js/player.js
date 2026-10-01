@@ -285,7 +285,7 @@
         if (this.bounty) {
           const bonus = this.mass * C.HUNT_BOUNTY;
           killer.gainMass(bonus, 'bounty');
-          if (killer.isPlayer) G.ui.toast('🎯 Награда за охоту: +' + Math.round(bonus) + ' массы!', 'good');
+          if (killer.isPlayer) G.ui.toast(G.Tf('hunt_bonus', { n: Math.round(bonus) }), 'good');
         }
       }
       // разлетевшаяся еда
@@ -367,7 +367,7 @@
               n.mass += c.mass * 0.8;
               org.cells.splice(org.cells.indexOf(c), 1);
               if (org.cells.length === 0) org.die(null);
-              else if (org.isPlayer) { G.ui.hitFlash(org); G.ui.toast('💀 ' + n.type.name + ' поглотил вашу клетку!', 'bad'); }
+              else if (org.isPlayer) { G.ui.hitFlash(org); G.ui.toast(G.Tf('npc_eat_you', { name: G.T(n.type.name) }), 'bad'); }
               break;
             } else if (n.kind === 'boss' && c.mass > n.mass * 1.5) {
               // босс ест только гигантов... наоборот: гигант ест босса
@@ -416,10 +416,10 @@
         prey.die(eater);
       } else if (prey.isPlayer) {
         G.ui.hitFlash(prey);
-        if (eater.isPlayer) G.ui.toast('Вы поглотили клетку ' + prey.name + ' (+' + Math.round(gain) + ')', 'good');
+        if (eater.isPlayer) G.ui.toast(G.Tf('ate_cell', { name: prey.name, n: Math.round(gain) }), 'good');
       }
       if (eater.isPlayer && !prey.isPlayer) {
-        G.ui.toast('Поглощена ' + prey.name + ' (+' + Math.round(gain) + ')', 'good');
+        G.ui.toast(G.Tf('absorbed', { name: prey.name, n: Math.round(gain) }), 'good');
       }
     },
 
@@ -433,7 +433,7 @@
       if (n.kind === 'boss') {
         org.kills++;
         G.combo.onKill(org);
-        G.ui.banner('💥 ' + org.name + ' уничтожил босса!', 3500);
+        G.ui.banner(G.Tf('boss_killed', { name: org.name }), 3500);
       }
     },
   };

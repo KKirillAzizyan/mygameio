@@ -26,17 +26,36 @@
     }, { passive: false });
     canvas.addEventListener('touchend', e => { e.preventDefault(); input.down = false; }, { passive: false });
 
+    // Раскладконезависимый код клавиши (требование 1.6.2.4):
+    // на русской раскладке «й» даёт KeyQ, а не e.key === 'q'.
+    const keyOf = (e) => {
+      const c = e.code || '';
+      if (/^Key[A-Z]$/.test(c)) return c.slice(3);
+      if (/^Digit[0-9]$/.test(c)) return c.slice(5);
+      if (/^Numpad[0-9]$/.test(c)) return c.slice(6);
+      if (c === 'Space') return ' ';
+      if (c === 'Enter' || c === 'NumpadEnter') return 'Enter';
+      return e.key.length === 1 ? e.key.toUpperCase() : e.key;
+    };
+
     window.addEventListener('keydown', e => {
-      const k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
+      const k = keyOf(e);
       if (!input.keys[k]) input.tapped[k] = true;
       input.keys[k] = true;
-      if ([' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
+      if ([' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(k)) e.preventDefault();
     });
     window.addEventListener('keyup', e => {
-      const k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
+      const k = keyOf(e);
       input.keys[k] = false;
     });
     window.addEventListener('blur', () => { input.keys = {}; input.down = false; });
+
+    // Требования 1.6.1.8 / 1.6.2.7: на игровом поле нет выделения текста
+    // и контекстного меню (долгое нажатие на тач-устройствах).
+    window.addEventListener('contextmenu', e => {
+      if (e.target === canvas || e.target === document.body) e.preventDefault();
+    });
+    canvas.addEventListener('mousedown', e => { if (e.button === 2) e.preventDefault(); });
   };
 
   // одноразовое нажатие
