@@ -10,13 +10,14 @@ Agar.io-подобная игра с глубокими механиками: л
 Откройте `index.html` в любом современном браузере (Chrome/Edge/Firefox).
 
 ### Вариант 2 — локальный сервер (рекомендуется)
-```bash
-# любой статический сервер, например:
+```powershell
+# Windows (PowerShell):
+powershell -ExecutionPolicy Bypass -File serve.ps1     # → http://localhost:8765
+
+# или любой другой статический сервер:
 npx serve .
-# или
 python -m http.server 8765
 ```
-и откройте http://localhost:8765
 
 ## 🎮 Управление
 
