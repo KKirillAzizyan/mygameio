@@ -1,0 +1,96 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0e17; font-family: 'Segoe UI', Roboto, sans-serif; user-select: none; }
+#app { position: relative; width: 100%; height: 100%; }
+#game { position: absolute; inset: 0; display: block; cursor: crosshair; }
+.hidden { display: none !important; }
+
+/* ---------- HUD ---------- */
+#hud { position: absolute; inset: 0; pointer-events: none; color: #dfe8f5; }
+
+#stats { position: absolute; top: 12px; left: 12px; background: rgba(10,16,28,.72); border: 1px solid rgba(120,170,255,.25); border-radius: 10px; padding: 10px 14px; min-width: 220px; max-width: 300px; backdrop-filter: blur(4px); }
+#massLine { font-size: 18px; }
+#massVal { color: #7ee787; font-size: 22px; }
+#energyBar { position: relative; height: 16px; background: rgba(255,255,255,.12); border-radius: 8px; margin-top: 8px; overflow: hidden; }
+#energyFill { height: 100%; width: 100%; background: linear-gradient(90deg, #3b82f6, #22d3ee); border-radius: 8px; transition: width .15s; }
+#energyVal { position: absolute; inset: 0; text-align: center; font-size: 11px; line-height: 16px; color: #fff; text-shadow: 0 1px 2px #000; }
+#effects { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.effIcon { font-size: 13px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); border-radius: 6px; padding: 2px 6px; }
+#decoy { display: none; margin-top: 6px; color: #ff9f43; font-size: 13px; }
+
+#kingInfo { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); background: rgba(40,30,5,.78); border: 1px solid rgba(255,200,60,.5); border-radius: 10px; padding: 8px 16px; text-align: center; min-width: 260px; }
+#kingText { font-size: 14px; color: #ffd76a; }
+#kingBar { height: 8px; background: rgba(255,255,255,.15); border-radius: 4px; margin-top: 6px; overflow: hidden; }
+#kingFill { height: 100%; width: 0%; background: linear-gradient(90deg, #f59e0b, #fde047); }
+
+#eventBanner { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); background: rgba(120,40,160,.85); border: 1px solid rgba(220,150,255,.6); padding: 10px 26px; border-radius: 999px; font-size: 17px; font-weight: 600; text-shadow: 0 1px 3px #000; box-shadow: 0 0 24px rgba(180,90,255,.4); }
+
+#combo { position: absolute; top: 130px; left: 50%; transform: translateX(-50%); font-size: 26px; font-weight: 800; color: #ff7849; text-shadow: 0 0 12px rgba(255,90,40,.8); }
+
+#rightPanel { position: absolute; top: 12px; right: 12px; width: 220px; display: flex; flex-direction: column; gap: 10px; }
+.panelTitle { font-size: 13px; font-weight: 700; color: #9db8e8; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+#leaderboard, #contracts { background: rgba(10,16,28,.72); border: 1px solid rgba(120,170,255,.25); border-radius: 10px; padding: 10px 12px; backdrop-filter: blur(4px); }
+#lbList { list-style: none; font-size: 13px; }
+#lbList li { padding: 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#lbList li.me { color: #7ee787; font-weight: 700; }
+#lbList .lbRank { display: inline-block; width: 22px; color: #7f93b8; }
+#ctList { list-style: none; font-size: 13px; }
+#ctList li { padding: 3px 0; color: #cfe0f7; }
+#ctList li.done { color: #7ee787; }
+#ctList .ctProg { color: #ffd76a; font-weight: 700; }
+
+#minimap { position: absolute; left: 12px; bottom: 12px; width: 190px; height: 190px; background: rgba(10,16,28,.72); border: 1px solid rgba(120,170,255,.3); border-radius: 10px; }
+
+#hotbar { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; transform-origin: bottom center; }
+.slotGroup { display: flex; gap: 6px; background: rgba(10,16,28,.72); border: 1px solid rgba(120,170,255,.25); border-radius: 10px; padding: 8px; }
+.slot { position: relative; width: 46px; height: 46px; border-radius: 8px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 18px; overflow: hidden; }
+.slot .key { position: absolute; top: 1px; left: 4px; font-size: 9px; color: #9db8e8; font-weight: 700; }
+.slot .cd { position: absolute; inset: 0; background: rgba(0,0,0,.72); display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-weight: 700; }
+.slot .cost { position: absolute; bottom: 1px; right: 3px; font-size: 8px; color: #22d3ee; }
+.slot.disabled { opacity: .4; }
+.slotGroup .grpLabel { position: absolute; }
+
+#toasts { position: absolute; right: 12px; bottom: 90px; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.toast { background: rgba(20,30,50,.9); border: 1px solid rgba(120,170,255,.4); border-radius: 8px; padding: 8px 14px; font-size: 14px; animation: toastIn .25s ease; }
+.toast.good { border-color: rgba(126,231,135,.6); color: #b8f5c0; }
+.toast.bad { border-color: rgba(255,110,110,.6); color: #ffc4c4; }
+@keyframes toastIn { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+#hint { position: absolute; bottom: 4px; right: 8px; font-size: 11px; color: rgba(200,215,240,.45); }
+
+/* ---------- Оверлеи ---------- */
+.overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(4,7,14,.78); backdrop-filter: blur(3px); z-index: 10; }
+.panel { background: linear-gradient(180deg, #111a2e, #0c1322); border: 1px solid rgba(120,170,255,.35); border-radius: 16px; padding: 30px 36px; text-align: center; max-width: 560px; width: 92%; box-shadow: 0 12px 60px rgba(0,0,0,.6); color: #dfe8f5; }
+.panel.wide { max-width: 860px; max-height: 88vh; overflow-y: auto; }
+.panel h1 { font-size: 42px; background: linear-gradient(90deg, #7ee787, #22d3ee); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 8px; }
+.panel h2 { font-size: 26px; margin-bottom: 16px; }
+.panel .sub { color: #9db8e8; margin-bottom: 20px; font-size: 15px; }
+.panel input { display: block; width: 100%; padding: 12px 16px; font-size: 17px; border-radius: 10px; border: 1px solid rgba(120,170,255,.4); background: rgba(255,255,255,.06); color: #fff; outline: none; text-align: center; margin-bottom: 14px; }
+.panel button { display: block; width: 100%; padding: 13px; font-size: 17px; font-weight: 700; border: none; border-radius: 10px; background: linear-gradient(90deg, #22c55e, #16a34a); color: #fff; cursor: pointer; margin-top: 10px; transition: transform .1s, filter .15s; }
+.panel button:hover { filter: brightness(1.15); transform: translateY(-1px); }
+.panel button.secondary { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+.menuControls { margin-top: 18px; font-size: 13px; color: #9db8e8; line-height: 1.7; background: rgba(255,255,255,.05); border-radius: 10px; padding: 12px; }
+.version { margin-top: 12px; font-size: 11px; color: rgba(157,184,232,.5); }
+
+#evoChoices { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.evoCard { background: rgba(255,255,255,.06); border: 1px solid rgba(126,231,135,.35); border-radius: 12px; padding: 14px 10px; cursor: pointer; transition: all .12s; }
+.evoCard:hover { background: rgba(126,231,135,.14); transform: translateY(-3px); border-color: #7ee787; }
+.evoCard .evoIcon { font-size: 32px; }
+.evoCard .evoName { font-size: 16px; font-weight: 700; color: #7ee787; margin: 6px 0; }
+.evoCard .evoDesc { font-size: 12px; color: #b9cbe8; line-height: 1.45; }
+.evoCard .evoLvl { font-size: 11px; color: #ffd76a; margin-top: 6px; }
+
+#helpBody { text-align: left; font-size: 14px; line-height: 1.75; color: #cfe0f7; }
+#helpBody table { width: 100%; border-collapse: collapse; margin: 8px 0 14px; }
+#helpBody td, #helpBody th { border: 1px solid rgba(120,170,255,.25); padding: 5px 9px; font-size: 13px; }
+#helpBody th { background: rgba(120,170,255,.12); color: #9db8e8; }
+#helpBody h3 { color: #7ee787; margin: 14px 0 4px; font-size: 15px; }
+kbd { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28); border-bottom-width: 2px; border-radius: 5px; padding: 1px 7px; font-size: 12px; font-family: inherit; }
+
+#deathStats { font-size: 17px; line-height: 2; color: #cfe0f7; margin-bottom: 10px; }
+#deathStats b { color: #7ee787; font-size: 22px; }
+
+@media (max-width: 760px) {
+  #rightPanel { width: 160px; }
+  #minimap { width: 130px; height: 130px; }
+  .slot { width: 38px; height: 38px; font-size: 15px; }
+}

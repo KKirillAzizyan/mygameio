@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>mygameio — клетки с механиками</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="stats">
+      <div id="massLine">🧫 <b id="massVal">0</b> массы</div>
+      <div id="energyBar"><div id="energyFill"></div><span id="energyVal"></span></div>
+      <div id="effects"></div>
+      <div id="decoy">⚠ <span id="decoyVal"></span></div>
+    </div>
+
+    <div id="kingInfo" class="hidden">
+      <span id="kingText">👑</span>
+      <div id="kingBar"><div id="kingFill"></div></div>
+    </div>
+
+    <div id="eventBanner" class="hidden"></div>
+    <div id="combo" class="hidden">🔥 x<span id="comboVal">1</span></div>
+
+    <div id="rightPanel">
+      <div id="leaderboard"><div class="panelTitle">🏆 Лидеры</div><ol id="lbList"></ol></div>
+      <div id="contracts"><div class="panelTitle">🎯 Контракты</div><ul id="ctList"></ul></div>
+    </div>
+
+    <canvas id="minimap" width="190" height="190"></canvas>
+
+    <div id="hotbar"></div>
+
+    <div id="toasts"></div>
+    <div id="hint">H — управление · P — пауза</div>
+  </div>
+
+  <!-- Стартовое меню -->
+  <div id="menu" class="overlay">
+    <div class="panel">
+      <h1>🧫 mygameio</h1>
+      <p class="sub">Agar.io-подобная игра: ловушки, способности, эволюция, опасности и многое другое</p>
+      <input id="nick" type="text" maxlength="16" placeholder="Введите ник..." value="">
+      <button id="playBtn">▶ Играть</button>
+      <div class="menuControls">
+        <b>Управление:</b> мышь — движение · Space — разделение ·
+        Q/E/R/F/C/V — способности · X — призрак ·
+        1–6 — ловушки · 7–0 — стройки · P — пауза · H — справка
+      </div>
+      <div class="version">v0.1 · план: 16/16 механик · этап 5 — мультиплеер</div>
+    </div>
+  </div>
+
+  <!-- Попап эволюции -->
+  <div id="evoPopup" class="overlay hidden">
+    <div class="panel wide">
+      <h2>🧬 Мутация! Выберите путь развития</h2>
+      <div id="evoChoices"></div>
+    </div>
+  </div>
+
+  <!-- Пауза -->
+  <div id="pause" class="overlay hidden">
+    <div class="panel">
+      <h2>⏸ Пауза</h2>
+      <button id="resumeBtn">Продолжить (P)</button>
+      <button id="helpBtn">Управление (H)</button>
+      <button id="menuBtn">В меню</button>
+    </div>
+  </div>
+
+  <!-- Справка -->
+  <div id="help" class="overlay hidden">
+    <div class="panel wide">
+      <h2>🎮 Управление и механики</h2>
+      <div id="helpBody"></div>
+      <button id="helpClose">Закрыть (H)</button>
+    </div>
+  </div>
+
+  <!-- Смерть -->
+  <div id="death" class="overlay hidden">
+    <div class="panel">
+      <h2>💀 Вы поглощены</h2>
+      <div id="deathStats"></div>
+      <button id="respawnBtn">🔄 Играть снова (Enter)</button>
+      <button id="deathMenuBtn">В меню</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/input.js"></script>
+<script src="js/food.js"></script>
+<script src="js/viruses.js"></script>
+<script src="js/traps.js"></script>
+<script src="js/buildings.js"></script>
+<script src="js/hazards.js"></script>
+<script src="js/npc.js"></script>
+<script src="js/abilities.js"></script>
+<script src="js/evolution.js"></script>
+<script src="js/king.js"></script>
+<script src="js/magnets.js"></script>
+<script src="js/events.js"></script>
+<script src="js/contracts.js"></script>
+<script src="js/combo.js"></script>
+<script src="js/player.js"></script>
+<script src="js/bots.js"></script>
+<script src="js/world.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

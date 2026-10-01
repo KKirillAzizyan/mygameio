@@ -1,0 +1,16 @@
+{
+  "name": "mygameio",
+  "version": "0.1.0",
+  "description": "Agar.io-подобная игра с ловушками, способностями, эволюцией и опасностями на карте",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "server": "node server/server.js"
+  },
+  "keywords": ["game", "agar", "io", "canvas", "multiplayer"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KKirillAzizyan/mygameio.git"
+  }
+}
